@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Excel, XML e CSV para JSON | Conversor Profissional</title>
+    <!-- SheetJS para Excel/CSV -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1a2a3a;
+        }
+
+        .corporate-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+
+        .company-header {
+            background: #0b2b3b;
+            padding: 1.6rem 2rem;
+            border-bottom: 1px solid #1e4a62;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: #2c9a8e;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: white;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #9bb7c9;
+            margin-top: 4px;
+        }
+
+        .content-pane {
+            padding: 2rem 2rem 1.5rem 2rem;
+        }
+
+        .upload-card {
+            background: #f9fbfd;
+            border: 1px solid #e2e9f0;
+            border-radius: 18px;
+            padding: 1.6rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .upload-card:hover {
+            border-color: #8ba7bc;
+            background: #ffffff;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+        }
+
+        .upload-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .upload-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #1f5569;
+            font-size: 1.1rem;
+        }
+
+        .file-label-btn {
+            background: #1f6e6b;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .file-label-btn:hover {
+            background: #0b544f;
+            transform: translateY(-1px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            background: #eef3f7;
+            padding: 0.6rem 1rem;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            color: #1e5a6e;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border: 1px solid #dde5ec;
+        }
+
+        .badge-file {
+            font-weight: 600;
+            background: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #106b64;
+        }
+
+        .settings-panel {
+            background: #ffffff;
+            border: 1px solid #e9edf2;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .setting-item {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .setting-item label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: #4a6f7e;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .setting-select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cfdde6;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f3b44;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: #2c9a8e;
+            box-shadow: 0 0 0 3px rgba(44,154,142,0.1);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 1.2rem;
+        }
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6e6b;
+        }
+        .checkbox-item label {
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1a3e4b;
+            margin: 0;
+        }
+
+        .btn-primary {
+            background: #1a5f64;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #0e464b;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #b7cfd4;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn-secondary {
+            background: #eef2f7;
+            border: 1px solid #cfdfe8;
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #1a5f64;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e3eaf1;
+            border-color: #9bb7c9;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .preview-section {
+            margin-top: 0.5rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .preview-header h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c6477;
+            letter-spacing: -0.2px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .json-viewer {
+            background: #1e2a32;
+            border-radius: 18px;
+            padding: 1rem;
+            height: 320px;
+            overflow: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #d9e9f2;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+
+        .status-bar {
+            margin-top: 1.2rem;
+            padding: 0.8rem 1rem;
+            background: #f4f8fe;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            color: #2c5f73;
+            border-left: 3px solid #2c9a8e;
+            transition: all 0.1s;
+        }
+
+        .status-bar.error {
+            background: #fef3f2;
+            border-left-color: #d45a4a;
+            color: #b13e2e;
+        }
+
+        .status-bar.success {
+            background: #e5f6ef;
+            border-left-color: #2c8c6e;
+            color: #146b4b;
+        }
+
+        footer {
+            background: #f8fafc;
+            border-top: 1px solid #e3eaf0;
+            padding: 1rem 2rem;
+            font-size: 0.7rem;
+            color: #5c7f8c;
+            text-align: center;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 1rem;
+            }
+            .content-pane {
+                padding: 1.5rem;
+            }
+            .settings-panel {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .checkbox-item {
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="corporate-container">
+    <div class="company-header">
+        <div class="logo-area">
+            <div class="logo-icon">📊</div>
+            <div class="logo-text">
+                <h1>Ferramenta de Conversão → JSON</h1>
+                <p>Suporte a Excel (.xlsx, .xls), XML, CSV · Processamento local e seguro</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-pane">
+        <div class="upload-card" id="dropZone">
+            <div class="upload-header">
+                <div class="upload-title">
+                    <span>📂</span> Arquivo fonte
+                </div>
+                <label class="file-label-btn" for="excelInput">
+                    📎 Selecionar arquivo
+                </label>
+                <input type="file" id="excelInput" accept=".xlsx, .xls, .xlsm, .xlsb, .csv, .xml">
+            </div>
+            <div class="file-info" id="fileInfo">
+                <span class="badge-file">Nenhum arquivo</span>
+                <span>Arraste ou clique: Excel (.xlsx, .xls) | XML | CSV</span>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <div class="setting-item">
+                <label>📑 Planilha (apenas Excel/CSV)</label>
+                <select id="sheetSelect" class="setting-select" disabled>
+                    <option value="">— Aguardando arquivo —</option>
+                </select>
+            </div>
+            <div class="setting-item checkbox-item">
+                <input type="checkbox" id="headerCheckbox" checked>
+                <label>🔖 Usar 1ª linha como cabeçalho (Excel/CSV)</label>
+            </div>
+            <div class="setting-item">
+                <button class="btn-primary" id="convertBtn" disabled>
+                    <span>⚡</span> Converter para JSON
+                </button>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-header">
+                <h3>📄 Prévia do JSON gerado</h3>
+                <div class="action-buttons">
+                    <button class="btn-secondary" id="downloadBtn" disabled>
+                        ⬇️ Baixar arquivo .json
+                    </button>
+                </div>
+            </div>
+            <div class="json-viewer">
+                <textarea id="jsonPreview" readonly placeholder="O JSON gerado aparecerá aqui após a conversão.
+Suporte nativo para XML (estrutura hierárquica), Excel e CSV."></textarea>
+            </div>
+            <div id="statusMsg" class="status-bar">
+                ✅ Pronto para conversão · Carregue um arquivo Excel, XML ou CSV
+            </div>
+        </div>
+    </div>
+    <footer>
+        <span>🔒 Processamento 100% local — nenhum dado é enviado para servidores. Formatos: XLSX, XLS, XML, CSV.</span>
+    </footer>
+</div>
+
+<script>
+    // Elementos DOM
+    const fileInput = document.getElementById('excelInput');
+    const fileInfoDiv = document.getElementById('fileInfo');
+    const sheetSelect = document.getElementById('sheetSelect');
+    const headerCheckbox = document.getElementById('headerCheckbox');
+    const convertBtn = document.getElementById('convertBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const jsonPreview = document.getElementById('jsonPreview');
+    const statusDiv = document.getElementById('statusMsg');
+
+    // Estados globais
+    let currentFileType = null;      // 'excel', 'xml'
+    let workbook = null;             // Para Excel
+    let xmlDoc = null;               // Para XML (documento parseado)
+    let currentSheetName = null;
+    let currentJsonString = '';
+    let originalBaseName = '';
+
+    // Helpers
+    function setStatus(message, isError = false, isSuccess = false) {
+        statusDiv.innerHTML = message;
+        statusDiv.classList.remove('error', 'success');
+        if (isError) statusDiv.classList.add('error');
+        else if (isSuccess) statusDiv.classList.add('success');
+    }
+
+    function resetConverterState() {
+        currentJsonString = '';
+        jsonPreview.value = '';
+        downloadBtn.disabled = true;
+        convertBtn.disabled = true;
+        sheetSelect.disabled = true;
+        sheetSelect.innerHTML = '<option value="">— Carregue um arquivo primeiro —</option>';
+        workbook = null;
+        xmlDoc = null;
+        currentSheetName = null;
+        currentFileType = null;
+    }
+
+    function getBaseName(filename) {
+        if (!filename) return "dados_convertidos";
+        const lastDot = filename.lastIndexOf('.');
+        if (lastDot === -1) return filename;
+        return filename.substring(0, lastDot);
+    }
+
+    // ----- Conversão XML -> JSON (estrutura hierárquica) -----
+    function xmlToJson(xmlNode) {
+        // Função recursiva para converter nó XML em objeto/array
+        if (xmlNode.nodeType === Node.TEXT_NODE) {
+            const text = xmlNode.textContent.trim();
+            return text === "" ? null : text;
+        }
+        if (xmlNode.nodeType === Node.ELEMENT_NODE) {
+            const obj = {};
+            let hasAttributes = false;
+            // atributos
+            if (xmlNode.attributes && xmlNode.attributes.length > 0) {
+                obj["@attributes"] = {};
+                for (let i = 0; i < xmlNode.attributes.length; i++) {
+                    const attr = xmlNode.attributes[i];
+                    obj["@attributes"][attr.name] = attr.value;
+                }
+                hasAttributes = true;
+            }
+            // filhos
+            const children = xmlNode.childNodes;
+            const childObj = {};
+            let hasChildElements = false;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                const childName = child.nodeName;
+                if (child.nodeType === Node.ELEMENT_NODE) {
+                    const childValue = xmlToJson(child);
+                    if (childValue !== null) {
+                        if (childObj[childName]) {
+                            if (!Array.isArray(childObj[childName])) {
+                                childObj[childName] = [childObj[childName]];
+                            }
+                            childObj[childName].push(childValue);
+                        } else {
+                            childObj[childName] = childValue;
+                        }
+                        hasChildElements = true;
+                    }
+                } else if (child.nodeType === Node.TEXT_NODE && child.textContent.trim() !== "") {
+                    const textContent = child.textContent.trim();
+                    if (!hasChildElements && !hasAttributes) {
+                        // nó simples com texto puro
+                        return textContent;
+                    }
+                    if (textContent) {
+                        childObj["#text"] = textContent;
+                    }
+                }
+            }
+            if (hasChildElements) {
+                Object.assign(obj, childObj);
+            } else if (!hasAttributes && Object.keys(childObj).length === 0) {
+                // sem filhos e sem atributos -> string vazia
+                return "";
+            }
+            return obj;
+        }
+        return null;
+    }
+
+    function convertXmlToJson(xmlString) {
+        const parser = new DOMParser();
+        const xmlDom = parser.parseFromString(xmlString, "application/xml");
+        const parserError = xmlDom.querySelector("parsererror");
+        if (parserError) {
+            throw new Error("Erro ao analisar XML: " + parserError.textContent);
+        }
+        const root = xmlDom.documentElement;
+        const jsonRoot = {};
+        jsonRoot[root.nodeName] = xmlToJson(root);
+        return JSON.stringify(jsonRoot, null, 2);
+    }
+
+    // ----- Conversão Excel/CSV (SheetJS) -----
+    function populateSheets(workbookData, filename) {
+        const sheetNames = workbookData.SheetNames;
+        if (!sheetNames || sheetNames.length === 0) {
+            setStatus("O arquivo Excel não contém planilhas.", true);
+            sheetSelect.innerHTML = '<option value="">Nenhuma planilha</option>';
+            sheetSelect.disabled = true;
+            convertBtn.disabled = true;
+            return false;
+        }
+        let options = '';
+        sheetNames.forEach((name, idx) => {
+            options += `<option value="${name.replace(/"/g, '&quot;')}">${name} ${idx === 0 ? '(padrão)' : ''}</option>`;
+        });
+        sheetSelect.innerHTML = options;
+        sheetSelect.disabled = false;
+        currentSheetName = sheetNames[0];
+        sheetSelect.value = currentSheetName;
+        convertBtn.disabled = false;
+        setStatus(`✅ Arquivo Excel "${filename}" carregado. ${sheetNames.length} planilha(s). Selecione uma e converta.`, false, true);
+        return true;
+    }
+
+    function generateExcelJSON() {
+        if (!workbook) throw new Error("Nenhum workbook carregado.");
+        if (!currentSheetName) throw new Error("Selecione uma planilha.");
+        const worksheet = workbook.Sheets[currentSheetName];
+        if (!worksheet) throw new Error(`Planilha ${currentSheetName} não encontrada`);
+        const useHeader = headerCheckbox.checked;
+        let jsonData;
+        if (useHeader) {
+            jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+        } else {
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+            jsonData = rows || [];
+        }
+        if (!jsonData || jsonData.length === 0) {
+            throw new Error("A planilha está vazia ou sem dados suficientes.");
+        }
+        return JSON.stringify(jsonData, null, 2);
+    }
+
+    // --- Lógica principal de conversão conforme tipo ---
+    function convertCurrentFile() {
+        if (currentFileType === 'excel') {
+            return generateExcelJSON();
+        } else if (currentFileType === 'xml') {
+            if (!xmlDoc) throw new Error("Documento XML não carregado.");
+            // xmlDoc é a string original
+            return convertXmlToJson(xmlDoc);
+        } else {
+            throw new Error("Tipo de arquivo não suportado ou não carregado.");
+        }
+    }
+
+    // --- Upload e processamento conforme extensão ---
+    function handleFileUpload(file) {
+        if (!file) {
+            resetConverterState();
+            fileInfoDiv.innerHTML = `<span class="badge-file">Nenhum arquivo</span><span>Arraste ou clique: Excel (.xlsx, .xls, .csv) ou XML</span>`;
+            setStatus("Selecione um arquivo Excel, XML ou CSV para iniciar.");
+            return;
+        }
+
+        const ext = file.name.split('.').pop().toLowerCase();
+        const allowedExcel = ['xlsx', 'xls', 'xlsm', 'xlsb', 'csv'];
+        const isExcel = allowedExcel.includes(ext);
+        const isXml = (ext === 'xml');
+
+        if (!isExcel && !isXml) {
+            resetConverterState();
+            fileInfoDiv.innerHTML = `<span class="badge-file">⚠️ Formato não suportado</span><span>Use .xlsx, .xls, .csv ou .xml</span>`;
+            setStatus(`Formato "${ext}" inválido. Envie Excel (XLSX/XLS/CSV) ou XML.`, true);
+            return;
+        }
+
+        // reset antes de processar
+        resetConverterState();
+        fileInfoDiv.innerHTML = `<span class="badge-file">📎 ${file.name}</span><span>${(file.size / 1024).toFixed(1)} KB - processando...</span>`;
+        setStatus(`Lendo ${file.name} ...`, false);
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                if (isExcel) {
+                    // Processa como Excel (binário)
+                    const data = new Uint8Array(e.target.result);
+                    const workbookParsed = XLSX.read(data, { type: 'array', cellDates: false, defval: "" });
+                    workbook = workbookParsed;
+                    currentFileType = 'excel';
+                    originalBaseName = getBaseName(file.name);
+                    const success = populateSheets(workbook, file.name);
+                    if (success) {
+                        fileInfoDiv.innerHTML = `<span class="badge-file">✅ ${file.name}</span><span>${(file.size / 1024).toFixed(1)} KB · Excel/CSV pronto</span>`;
+                    } else {
+                        throw new Error("Falha ao ler planilhas.");
+                    }
+                } 
+                else if (isXml) {
+                    // Processa XML como texto
+                    const xmlString = e.target.result;
+                    // Validação básica
+                    const parser = new DOMParser();
+                    const testDom = parser.parseFromString(xmlString, "application/xml");
+                    const parseError = testDom.querySelector("parsererror");
+                    if (parseError) {
+                        throw new Error("XML inválido: " + parseError.textContent);
+                    }
+                    xmlDoc = xmlString;
+                    currentFileType = 'xml';
+                    originalBaseName = getBaseName(file.name);
+                    // Desabilitar controles específicos do Excel
+                    sheetSelect.disabled = true;
+                    sheetSelect.innerHTML = '<option value="">— XML não requer planilha —</option>';
+                    headerCheckbox.disabled = true;
+                    convertBtn.disabled = false;
+                    fileInfoDiv.innerHTML = `<span class="badge-file">📄 ${file.name}</span><span>${(file.size / 1024).toFixed(1)} KB · XML carregado</span>`;
+                    setStatus(`✅ Arquivo XML "${file.name}" carregado. Clique em "Converter para JSON".`, false, true);
+                    // Reativa checkbox visualmente mas não terá efeito, fica disabled
+                }
+            } catch (err) {
+                console.error(err);
+                setStatus(`Erro ao processar arquivo: ${err.message}`, true);
+                fileInfoDiv.innerHTML = `<span class="badge-file">❌ Falha</span><span>Não foi possível processar o arquivo</span>`;
+                resetConverterState();
+                if (isXml) headerCheckbox.disabled = false; // reenable padrão
+            }
+        };
+        reader.onerror = () => {
+            setStatus("Erro na leitura do arquivo. Tente novamente.", true);
+            resetConverterState();
+            fileInfoDiv.innerHTML = `<span class="badge-file">Erro de leitura</span><span>Arquivo inacessível</span>`;
+        };
+        
+        if (isExcel) reader.readAsArrayBuffer(file);
+        else if (isXml) reader.readAsText(file, "UTF-8");
+    }
+
+    // Eventos
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) handleFileUpload(file);
+        else resetConverterState();
+    });
+
+    sheetSelect.addEventListener('change', () => {
+        if (currentFileType === 'excel' && sheetSelect.value && workbook) {
+            currentSheetName = sheetSelect.value;
+            setStatus(`Planilha alterada para: "${currentSheetName}". Converta novamente.`, false);
+            if (currentJsonString) {
+                downloadBtn.disabled = true;
+                currentJsonString = '';
+                jsonPreview.value = jsonPreview.value ? jsonPreview.value + "\n\n[Planilha alterada - gere novo JSON]" : "";
+            }
+        }
+    });
+
+    convertBtn.addEventListener('click', () => {
+        if (!currentFileType || (currentFileType === 'excel' && !workbook) || (currentFileType === 'xml' && !xmlDoc)) {
+            setStatus("Nenhum arquivo válido carregado. Faça upload primeiro.", true);
+            return;
+        }
+        if (currentFileType === 'excel' && !currentSheetName) {
+            setStatus("Selecione uma planilha válida.", true);
+            return;
+        }
+        setStatus(`🔄 Convertendo ${currentFileType.toUpperCase()} para JSON...`, false);
+        setTimeout(() => {
+            try {
+                const jsonString = convertCurrentFile();
+                currentJsonString = jsonString;
+                jsonPreview.value = currentJsonString;
+                downloadBtn.disabled = false;
+                const sizeKB = (new Blob([currentJsonString]).size / 1024).toFixed(1);
+                setStatus(`✅ Conversão concluída! Tamanho JSON: ${sizeKB} KB. Clique em "Baixar".`, false, true);
+            } catch (err) {
+                setStatus(`Erro na conversão: ${err.message}`, true);
+                currentJsonString = '';
+                jsonPreview.value = '';
+                downloadBtn.disabled = true;
+            }
+        }, 10);
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        if (!currentJsonString) {
+            setStatus("Nenhum JSON disponível. Realize a conversão primeiro.", true);
+            return;
+        }
+        const fileName = originalBaseName ? `${originalBaseName}.json` : "convertido.json";
+        const blob = new Blob([currentJsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setStatus(`📥 Download: ${fileName} (${(blob.size / 1024).toFixed(1)} KB)`, false, true);
+    });
+
+    // Drag & drop
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, preventDefaults, false));
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+    ['dragenter', 'dragover'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor = '#2c9a8e'; dropZone.style.backgroundColor = '#f0f7fc'; }));
+    ['dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor = '#e2e9f0'; dropZone.style.backgroundColor = '#f9fbfd'; }));
+    dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+            handleFileUpload(file);
+        }
+    });
+
+    // Inicialização: liberar checkbox caso reset geral
+    window.addEventListener('load', () => {
+        resetConverterState();
+        headerCheckbox.disabled = false;
+        setStatus("📁 Ambiente pronto. Envie Excel (XLSX/XLS/CSV) ou XML para conversão.");
+    });
+</script>
+</body>
+</html>
