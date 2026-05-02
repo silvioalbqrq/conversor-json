@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Conversor Universal → JSON / Markdown / TOON | Excel, XML, CSV, PDF, Colar</title>
+    <!-- PWA manifest embutido -->
+    <link rel="manifest" href="data:application/manifest+json,{
+        \"name\":\"Conversor Universal JSON/Markdown/TOON\",
+        \"short_name\":\"ConvJSON\",
+        \"start_url\":\".\",
+        \"display\":\"standalone\",
+        \"background_color\":\"#0b2b3b\",
+        \"theme_color\":\"#1a5f64\",
+        \"icons\":[{\"src\":\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232c9a8e'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='white'%3E🔄%3C/text%3E%3C/svg%3E\",\"sizes\":\"any\"}]
+    }">
+    <!-- SheetJS -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- PDF.js com fallback -->
+    <script>
+        function loadPdfJs(cdnList, index = 0) {
+            if (index >= cdnList.length) {
+                console.error("Todas as CDNs do PDF.js falharam.");
+                window.pdfjsLoadError = true;
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = cdnList[index];
+            script.onload = () => {
+                console.log(`PDF.js carregado de: ${cdnList[index]}`);
+                window.pdfjsLoadError = false;
+                if (typeof pdfjsLib !== 'undefined') {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = cdnList[index].replace('pdf.min.js', 'pdf.worker.min.js');
+                }
+            };
+            script.onerror = () => {
+                console.warn(`Falha ao carregar PDF.js de: ${cdnList[index]}`);
+                loadPdfJs(cdnList, index + 1);
+            };
+            document.head.appendChild(script);
+        }
+        const cdnList = [
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js',
+            'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js'
+        ];
+        loadPdfJs(cdnList);
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1a2a3a;
+        }
+        .corporate-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+        .company-header {
+            background: #0b2b3b;
+            padding: 1.6rem 2rem;
+            border-bottom: 1px solid #1e4a62;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            background: #2c9a8e;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: white;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #9bb7c9;
+            margin-top: 4px;
+        }
+        .content-pane {
+            padding: 2rem 2rem 1.5rem 2rem;
+        }
+        .upload-card {
+            background: #f9fbfd;
+            border: 1px solid #e2e9f0;
+            border-radius: 18px;
+            padding: 1.6rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .upload-card:hover {
+            border-color: #8ba7bc;
+            background: #ffffff;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+        }
+        .upload-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .upload-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #1f5569;
+            font-size: 1.1rem;
+        }
+        .file-label-btn {
+            background: #1f6e6b;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .file-label-btn:hover {
+            background: #0b544f;
+            transform: translateY(-1px);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-info {
+            background: #eef3f7;
+            padding: 0.6rem 1rem;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            color: #1e5a6e;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border: 1px solid #dde5ec;
+        }
+        .badge-file {
+            font-weight: 600;
+            background: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #106b64;
+        }
+        .settings-panel {
+            background: #ffffff;
+            border: 1px solid #e9edf2;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .setting-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .setting-group label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: #4a6f7e;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .setting-select, .setting-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cfdde6;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f3b44;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .textarea-colagem {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cfdde6;
+            background: #fafcfd;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            resize: vertical;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 1.2rem;
+        }
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6e6b;
+        }
+        .checkbox-item label {
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1a3e4b;
+            margin: 0;
+        }
+        .btn-primary, .btn-secondary, .btn-clear {
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #1a5f64;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0e464b;
+            transform: translateY(-1px);
+        }
+        .btn-primary:disabled {
+            background: #b7cfd4;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .btn-secondary {
+            background: #eef2f7;
+            border: 1px solid #cfdfe8;
+            color: #1a5f64;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #e3eaf1;
+            border-color: #9bb7c9;
+        }
+        .btn-clear {
+            background: #fde7e7;
+            border: 1px solid #f5c6c6;
+            color: #c0392b;
+        }
+        .btn-clear:hover {
+            background: #f8d7d7;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .preview-section {
+            margin-top: 0.5rem;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .preview-header h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c6477;
+        }
+        .json-viewer {
+            background: #1e2a32;
+            border-radius: 18px;
+            padding: 1rem;
+            min-height: 320px;
+            max-height: 55vh;
+            overflow: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+            background: transparent;
+            border: none;
+            color: #d9e9f2;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+        }
+        .status-bar {
+            margin-top: 1.2rem;
+            padding: 0.8rem 1rem;
+            background: #f4f8fe;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            color: #2c5f73;
+            border-left: 3px solid #2c9a8e;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-bar.error {
+            background: #fef3f2;
+            border-left-color: #d45a4a;
+            color: #b13e2e;
+        }
+        .status-bar.success {
+            background: #e5f6ef;
+            border-left-color: #2c8c6e;
+            color: #146b4b;
+        }
+        .status-bar.warning {
+            background: #fff3e0;
+            border-left-color: #f39c12;
+            color: #c06d0a;
+        }
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #1f6e6b;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .tooltip-icon {
+            cursor: help;
+            font-size: 0.75rem;
+            background: #d4e0e8;
+            border-radius: 50%;
+            display: inline-block;
+            width: 16px;
+            text-align: center;
+            margin-left: 5px;
+        }
+        footer {
+            background: #f8fafc;
+            border-top: 1px solid #e3eaf0;
+            padding: 1rem 2rem;
+            font-size: 0.7rem;
+            color: #5c7f8c;
+            text-align: center;
+        }
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 1px solid #e0e9f0;
+        }
+        @media (max-width: 760px) {
+            body { padding: 1rem; }
+            .content-pane { padding: 1.5rem; }
+            .settings-panel { flex-direction: column; align-items: stretch; }
+            .checkbox-item { padding-top: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="corporate-container">
+    <div class="company-header">
+        <div class="logo-area">
+            <div class="logo-icon">🔄</div>
+            <div class="logo-text">
+                <h1>Conversor Universal → JSON / Markdown / TOON</h1>
+                <p>Excel · XML · CSV · PDF · Colar dados · Limpeza de moeda · Datas ISO · PWA offline</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-pane">
+        <div class="upload-card" id="dropZone">
+            <div class="upload-header">
+                <div class="upload-title">📂 Arquivo fonte</div>
+                <label class="file-label-btn" for="excelInput">📎 Selecionar arquivo</label>
+                <input type="file" id="excelInput" accept=".xlsx, .xls, .xlsm, .xlsb, .csv, .xml, .pdf">
+            </div>
+            <div class="file-info" id="fileInfo">
+                <span class="badge-file">Nenhum arquivo</span>
+                <span>Arraste ou clique: Excel, CSV, XML, PDF (max. 50 MB)</span>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <div class="setting-group" id="sheetGroup">
+                <label>📑 Planilha (Excel/CSV)</label>
+                <select id="sheetSelect" class="setting-select" disabled>
+                    <option value="">— Aguardando arquivo —</option>
+                </select>
+            </div>
+            <div class="setting-group" id="delimiterGroup" style="display: none;">
+                <label>📌 Delimitador CSV</label>
+                <select id="csvDelimiter" class="setting-select">
+                    <option value="auto">Automático</option>
+                    <option value=",">Vírgula (,)</option>
+                    <option value=";">Ponto e vírgula (;)</option>
+                    <option value="\t">Tabulação</option>
+                </select>
+            </div>
+            <div class="checkbox-item" id="pdfExtraGroup" style="display: none;">
+                <input type="checkbox" id="pdfIncludePositions" checked>
+                <label>📍 Incluir coordenadas (PDF)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="headerCheckbox" checked>
+                <label>🔖 Usar 1ª linha como cabeçalho</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="cleanCurrencyCheckbox">
+                <label>💰 Converter moeda para número (ex: R$ 1.250,00 → 1250.00)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="formatDatesCheckbox" checked>
+                <label>📅 Converter datas para ISO (AAAA-MM-DD)</label>
+            </div>
+            <div class="setting-group">
+                <label>📄 Formato de saída</label>
+                <select id="outputFormat" class="setting-select">
+                    <option value="json">JSON</option>
+                    <option value="markdown">Markdown</option>
+                    <option value="toon">TOON</option>
+                </select>
+            </div>
+            <div class="checkbox-item" id="xmlNamespaceGroup" style="display: none;">
+                <input type="checkbox" id="removeNamespaces">
+                <label>🏷️ Remover namespaces (XML)</label>
+            </div>
+            <div class="setting-group">
+                <button class="btn-primary" id="convertBtn" disabled>⚡ Converter (arquivo)</button>
+            </div>
+        </div>
+
+        <div class="settings-panel" style="border: 1px solid #d4e2ec; background: #fafcfd; flex-direction: column; align-items: stretch;">
+            <div class="upload-title" style="margin-bottom: 0.5rem;">📋 Colar dados para conversão</div>
+            <textarea id="pasteInput" rows="5" class="textarea-colagem" placeholder="Cole aqui dados em JSON, XML, CSV (texto) ou qualquer outro formato estruturado..."></textarea>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.8rem; align-items: flex-end;">
+                <div class="setting-group" style="min-width: 160px;">
+                    <label>Tipo de entrada</label>
+                    <select id="pasteType" class="setting-select">
+                        <option value="auto">Auto detectar</option>
+                        <option value="json">JSON</option>
+                        <option value="xml">XML</option>
+                        <option value="csv">CSV (texto)</option>
+                        <option value="text">Texto puro</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-primary" id="pasteConvertBtn">🔄 Converter texto colado</button>
+                </div>
+                <div>
+                    <button class="btn-clear" id="clearPasteBtn">🗑️ Limpar campo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-header">
+                <h3>📄 Resultado da conversão</h3>
+                <div class="action-buttons">
+                    <button class="btn-copy" id="copyBtn" disabled>📋 Copiar</button>
+                    <button class="btn-secondary" id="formatBtn" disabled>✨ Reindentar (JSON)</button>
+                    <button class="btn-secondary" id="downloadBtn" disabled>⬇️ Baixar</button>
+                    <button class="btn-clear" id="clearBtn">🗑️ Limpar tudo</button>
+                </div>
+            </div>
+            <div class="json-viewer">
+                <textarea id="resultPreview" readonly placeholder="Resultado da conversão aparecerá aqui."></textarea>
+            </div>
+            <div id="statusMsg" class="status-bar">✅ Pronto · Carregue um arquivo ou cole dados</div>
+        </div>
+    </div>
+    <footer>🔒 100% local · PWA offline · Limpeza de moeda · Datas ISO · PDF.js · SheetJS</footer>
+</div>
+
+<script>
+    // ================= SERVICE WORKER (PWA) OFFLINE =================
+    if ('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('install', e => e.waitUntil(caches.open('conv-cache').then(c => c.addAll([
+            '/', '/index.html', 
+            'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js'
+        ]))));
+        self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));`;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(console.warn);
+    }
+
+    // ================= FUNÇÕES DE LIMPEZA =================
+    function convertCurrency(value) {
+        if (typeof value !== 'string') return value;
+        const match = value.match(/[+-]?\s*[\d\.,]+/);
+        if (!match) return value;
+        let numStr = match[0].trim();
+        let isBrazilian = numStr.includes(',') && (numStr.split(',').length === 2) && (numStr.split('.').length <= 2);
+        if (isBrazilian) {
+            numStr = numStr.replace(/\./g, '').replace(',', '.');
+        }
+        let num = parseFloat(numStr);
+        return isNaN(num) ? value : num;
+    }
+
+    function cleanData(data, convertCurrencyFlag, formatDatesFlag) {
+        if (data === null || data === undefined) return data;
+        if (convertCurrencyFlag && typeof data === 'string') {
+            return convertCurrency(data);
+        }
+        if (Array.isArray(data)) {
+            return data.map(item => cleanData(item, convertCurrencyFlag, formatDatesFlag));
+        }
+        if (data && typeof data === 'object') {
+            const newObj = {};
+            for (let [k, v] of Object.entries(data)) {
+                let cleaned = cleanData(v, convertCurrencyFlag, formatDatesFlag);
+                if (formatDatesFlag && typeof v === 'number') {
+                    const date = new Date((v - 25569) * 86400000);
+                    if (!isNaN(date.getTime()) && v > 1000 && v < 100000 && Number.isInteger(v)) {
+                        cleaned = date.toISOString().split('T')[0];
+                    }
+                }
+                newObj[k] = cleaned;
+            }
+            return newObj;
+        }
+        if (formatDatesFlag && typeof data === 'number') {
+            const date = new Date((data - 25569) * 86400000);
+            if (!isNaN(date.getTime()) && data > 1000 && data < 100000 && Number.isInteger(data)) {
+                return date.toISOString().split('T')[0];
+            }
+            return data;
+        }
+        return data;
+    }
+
+    // ================= DETECÇÃO INTELIGENTE DE DELIMITADOR CSV =================
+    function detectDelimiter(csvText) {
+        const firstLines = csvText.split(/\r?\n/).slice(0, 5).join('\n');
+        const commaCount = (firstLines.match(/,/g) || []).length;
+        const semicolonCount = (firstLines.match(/;/g) || []).length;
+        if (semicolonCount > commaCount) return ';';
+        return ',';
+    }
+
+    // ================= FUNÇÃO MARKDOWN MELHORADA (UMA TABELA PARA CATÁLOGOS) =================
+    function toMarkdown(data, indentLevel = 0) {
+        const indent = '  '.repeat(indentLevel);
+        
+        // 1. Array de objetos com a mesma estrutura (dados tabulares) -> UMA ÚNICA TABELA
+        if (Array.isArray(data) && data.length > 0 && data.every(item => item && typeof item === 'object' && !Array.isArray(item))) {
+            // Coleta todas as chaves (todas as colunas possíveis)
+            const allKeys = new Set();
+            for (const item of data) {
+                Object.keys(item).forEach(k => allKeys.add(k));
+            }
+            const headers = Array.from(allKeys);
+            // Se tiver pelo menos 2 colunas, cria uma tabela consolidada
+            if (headers.length >= 2) {
+                let md = '| ' + headers.join(' | ') + ' |\n|' + headers.map(() => '---').join('|') + '|\n';
+                for (const row of data) {
+                    md += '| ' + headers.map(h => String(row[h] ?? '').replace(/\n/g, ' ')).join(' | ') + ' |\n';
+                }
+                return md;
+            }
+            // Se tiver apenas 1 coluna, transforma em lista com traços
+            if (headers.length === 1) {
+                let md = '';
+                for (const row of data) {
+                    md += indent + '- ' + String(row[headers[0]] ?? '').replace(/\n/g, ' ') + '\n';
+                }
+                return md;
+            }
+        }
+        
+        // 2. Caso especial: páginas de PDF (não consolidar em tabela)
+        if (Array.isArray(data) && data.length > 0 && data.every(item => item && item.hasOwnProperty('page'))) {
+            let md = '';
+            for (const page of data) {
+                md += `${indent}## Página ${page.page}\n\n`;
+                if (page.text) md += `${indent}${page.text}\n\n`;
+                else if (page.items && Array.isArray(page.items)) {
+                    if (page.items.length > 0 && typeof page.items[0] === 'object') {
+                        for (const it of page.items) {
+                            md += `${indent}- ${it.str} (x:${it.x?.toFixed(0)}, y:${it.y?.toFixed(0)})\n`;
+                        }
+                        md += '\n';
+                    } else {
+                        md += `${indent}${page.items.join(' ')}\n\n`;
+                    }
+                }
+            }
+            return md;
+        }
+        
+        // 3. Lista simples (arrays de primitivos)
+        if (Array.isArray(data)) {
+            return data.map(item => `${indent}- ${toMarkdown(item, 0)}`).join('\n');
+        }
+        
+        // 4. Objeto simples (chave/valor) -> tabela descritiva
+        if (typeof data === 'object' && data !== null) {
+            const allPrimitive = Object.values(data).every(v => typeof v !== 'object' || v === null);
+            if (allPrimitive) {
+                let md = '| Chave | Valor |\n| --- | --- |\n';
+                for (let [k, v] of Object.entries(data)) {
+                    md += `| ${k} | ${String(v)} |\n`;
+                }
+                return md;
+            } else {
+                // Objeto aninhado -> seções
+                let md = '';
+                for (let [k, v] of Object.entries(data)) {
+                    md += `\n## ${k}\n\n${toMarkdown(v, indentLevel + 1)}\n`;
+                }
+                return md;
+            }
+        }
+        
+        return String(data);
+    }
+
+    // ================= OUTRAS FUNÇÕES AUXILIARES (jsonToToon, etc.) =================
+    function jsonToToon(data, indent = 0) {
+        const sp = '  '.repeat(indent);
+        if (data === null) return 'null';
+        if (typeof data === 'boolean') return data ? 'true' : 'false';
+        if (typeof data === 'number') return String(data);
+        if (typeof data === 'string') {
+            return (data.includes('\n') || data.includes('"') || data.includes(':')) ? JSON.stringify(data) : data;
+        }
+        if (Array.isArray(data)) {
+            if (data.length === 0) return '[]';
+            const allPrimitive = data.every(v => typeof v !== 'object' || v === null);
+            if (allPrimitive) return '[' + data.map(v => jsonToToon(v,0)).join(', ') + ']';
+            let out = '';
+            for (const item of data) {
+                if (item && typeof item === 'object') out += sp + '- ' + jsonToToon(item, indent+1).trimStart();
+                else out += sp + '- ' + jsonToToon(item,0) + '\n';
+            }
+            return out;
+        }
+        if (typeof data === 'object') {
+            let out = '';
+            for (const [k,v] of Object.entries(data)) {
+                const val = jsonToToon(v, indent+1);
+                if (v && typeof v === 'object' && !Array.isArray(v)) out += sp + k + ':\n' + val;
+                else if (Array.isArray(v) && v.some(x => typeof x === 'object')) out += sp + k + ':\n' + val;
+                else out += sp + k + ': ' + val + '\n';
+            }
+            return out;
+        }
+        return String(data);
+    }
+
+    function formatOutput(rawData, format) {
+        if (format === 'json') return JSON.stringify(rawData, null, 2);
+        if (format === 'markdown') return toMarkdown(rawData);
+        if (format === 'toon') return jsonToToon(rawData);
+        return JSON.stringify(rawData, null, 2);
+    }
+
+    // ================= ELEMENTOS DOM E ESTADO =================
+    const fileInput = document.getElementById('excelInput');
+    const fileInfoDiv = document.getElementById('fileInfo');
+    const sheetSelect = document.getElementById('sheetSelect');
+    const headerCheckbox = document.getElementById('headerCheckbox');
+    const cleanCurrencyCheckbox = document.getElementById('cleanCurrencyCheckbox');
+    const formatDatesCheckbox = document.getElementById('formatDatesCheckbox');
+    const outputFormatSelect = document.getElementById('outputFormat');
+    const convertBtn = document.getElementById('convertBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const formatBtn = document.getElementById('formatBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultPreview = document.getElementById('resultPreview');
+    const statusDiv = document.getElementById('statusMsg');
+    const csvDelimiterSelect = document.getElementById('csvDelimiter');
+    const delimiterGroup = document.getElementById('delimiterGroup');
+    const xmlNamespaceGroup = document.getElementById('xmlNamespaceGroup');
+    const pdfExtraGroup = document.getElementById('pdfExtraGroup');
+    const removeNamespacesChk = document.getElementById('removeNamespaces');
+    const pdfIncludePositions = document.getElementById('pdfIncludePositions');
+    const pasteInput = document.getElementById('pasteInput');
+    const pasteType = document.getElementById('pasteType');
+    const pasteConvertBtn = document.getElementById('pasteConvertBtn');
+    const clearPasteBtn = document.getElementById('clearPasteBtn');
+
+    let currentFileType = null;
+    let workbook = null;
+    let xmlRawString = null;
+    let pdfData = null;
+    let currentSheetName = null;
+    let currentResultString = '';
+    let originalBaseName = '';
+    let isConverting = false;
+    let pdfReady = false;
+
+    let pdfCheck = setInterval(() => {
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfReady = true;
+            clearInterval(pdfCheck);
+            if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+            }
+        }
+    }, 200);
+    setTimeout(() => clearInterval(pdfCheck), 5000);
+
+    function setStatus(msg, isErr = false, isSuccess = false, isWarning = false, showSpinner = false) {
+        statusDiv.innerHTML = '';
+        if (showSpinner) {
+            const s = document.createElement('div');
+            s.className = 'spinner';
+            statusDiv.appendChild(s);
+            statusDiv.appendChild(document.createTextNode(' ' + msg));
+        } else statusDiv.textContent = msg;
+        statusDiv.classList.remove('error','success','warning');
+        if (isErr) statusDiv.classList.add('error');
+        else if (isSuccess) statusDiv.classList.add('success');
+        else if (isWarning) statusDiv.classList.add('warning');
+    }
+
+    function resetUIForFileType() {
+        delimiterGroup.style.display = 'none';
+        xmlNamespaceGroup.style.display = 'none';
+        pdfExtraGroup.style.display = 'none';
+        sheetSelect.disabled = true;
+        if (currentFileType === 'xml') {
+            sheetSelect.innerHTML = '<option>— XML não usa planilhas —</option>';
+            xmlNamespaceGroup.style.display = 'flex';
+            headerCheckbox.disabled = false;
+        } else if (currentFileType === 'excel') {
+            sheetSelect.disabled = false;
+            const isCsv = fileInput.files[0]?.name.toLowerCase().endsWith('.csv');
+            delimiterGroup.style.display = isCsv ? 'flex' : 'none';
+            headerCheckbox.disabled = false;
+        } else if (currentFileType === 'pdf') {
+            sheetSelect.innerHTML = '<option>— PDF não possui planilhas —</option>';
+            pdfExtraGroup.style.display = 'flex';
+            headerCheckbox.disabled = true;
+        }
+    }
+
+    function resetConverterState() {
+        currentResultString = '';
+        resultPreview.value = '';
+        downloadBtn.disabled = true;
+        copyBtn.disabled = true;
+        formatBtn.disabled = true;
+        convertBtn.disabled = true;
+        workbook = null; xmlRawString = null; pdfData = null;
+        currentSheetName = null; currentFileType = null;
+        sheetSelect.innerHTML = '<option value="">— Carregue um arquivo —</option>';
+        headerCheckbox.disabled = false; isConverting = false;
+        delimiterGroup.style.display = 'none'; xmlNamespaceGroup.style.display = 'none'; pdfExtraGroup.style.display = 'none';
+    }
+
+    function getBaseName(filename) {
+        if (!filename) return 'convertido';
+        return filename.replace(/\.[^/.]+$/, '');
+    }
+
+    // ================= PROCESSAMENTO DE ARQUIVOS =================
+    async function loadPdf(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => { pdfData = e.target.result; currentFileType = 'pdf'; originalBaseName = getBaseName(file.name); resetUIForFileType(); convertBtn.disabled = false; resolve(); };
+            reader.onerror = () => reject(new Error("Erro na leitura do PDF"));
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    async function loadXml(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => { xmlRawString = e.target.result; currentFileType = 'xml'; originalBaseName = getBaseName(file.name); resetUIForFileType(); convertBtn.disabled = false; resolve(); };
+            reader.onerror = () => reject(new Error("Erro na leitura do XML"));
+            reader.readAsText(file, "UTF-8");
+        });
+    }
+    async function loadExcelOrCsv(file, ext) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    let wb;
+                    if (ext === 'csv') {
+                        let txt = e.target.result;
+                        let delim = csvDelimiterSelect.value;
+                        if (delim === 'auto') delim = detectDelimiter(txt);
+                        const d = delim === '\\t' ? '\t' : delim;
+                        wb = XLSX.read(txt, { type: 'string', FS: d, raw: true, cellDates: true, defval: "" });
+                    } else {
+                        wb = XLSX.read(e.target.result, { type: 'array', cellDates: true, defval: "" });
+                    }
+                    workbook = wb;
+                    currentFileType = 'excel';
+                    originalBaseName = getBaseName(file.name);
+                    const sheets = wb.SheetNames || [];
+                    if (!sheets.length) throw new Error("Nenhuma planilha");
+                    sheetSelect.innerHTML = sheets.map((n,i) => `<option value="${n.replace(/"/g,'&quot;')}">${n}${i===0?' (padrão)':''}</option>`).join('');
+                    currentSheetName = sheets[0];
+                    sheetSelect.value = currentSheetName;
+                    resetUIForFileType();
+                    convertBtn.disabled = false;
+                    resolve();
+                } catch(err) { reject(new Error("Erro ao interpretar: "+err.message)); }
+            };
+            reader.onerror = () => reject(new Error("Falha na leitura"));
+            if (ext === 'csv') reader.readAsText(file, "UTF-8");
+            else reader.readAsArrayBuffer(file);
+        });
+    }
+
+    async function handleFileUpload(file) {
+        if (!file) return;
+        if (file.size > 50*1024*1024) { setStatus(`❌ Limite 50MB`, true); return; }
+        const ext = file.name.split('.').pop().toLowerCase();
+        const allowed = ['xlsx','xls','xlsm','xlsb','csv','xml','pdf'];
+        if (!allowed.includes(ext)) { setStatus(`❌ Formato .${ext} não suportado`, true); return; }
+        resetConverterState();
+        fileInfoDiv.innerHTML = `<span class="badge-file">📎 ${file.name}</span><span>Carregando... ${(file.size/1024).toFixed(1)} KB</span>`;
+        setStatus(`Lendo ${file.name}...`, false, false, false, true);
+        try {
+            if (ext === 'pdf') await loadPdf(file);
+            else if (ext === 'xml') await loadXml(file);
+            else await loadExcelOrCsv(file, ext);
+            fileInfoDiv.innerHTML = `<span class="badge-file">✅ ${file.name}</span><span>${(file.size/1024).toFixed(1)} KB · pronto</span>`;
+            setStatus(`✅ Arquivo carregado.`, false, true);
+        } catch(err) { setStatus(`❌ Erro: ${err.message}`, true); fileInfoDiv.innerHTML = `<span class="badge-file">❌ Falha</span>`; convertBtn.disabled = true; }
+    }
+
+    // ================= CONVERSÃO XML -> OBJETO =================
+    function convertXmlToJson(xmlString, removeNs) {
+        const parser = new DOMParser();
+        const xmlDom = parser.parseFromString(xmlString, "application/xml");
+        const parserError = xmlDom.querySelector("parsererror");
+        if (parserError) throw new Error("XML inválido");
+        const root = xmlDom.documentElement;
+        function simplify(name) { return removeNs ? name.replace(/^.*:/,'') : name; }
+        function toJson(node) {
+            if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim() || null;
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const obj = {};
+                const nodeName = simplify(node.nodeName);
+                if (node.attributes.length) {
+                    obj["@attributes"] = {};
+                    for (let a of node.attributes) obj["@attributes"][simplify(a.name)] = a.value;
+                }
+                const childObj = {};
+                let hasElem = false;
+                for (let c of node.childNodes) {
+                    if (c.nodeType === Node.ELEMENT_NODE) {
+                        const cName = simplify(c.nodeName);
+                        const val = toJson(c);
+                        if (childObj[cName]) {
+                            if (!Array.isArray(childObj[cName])) childObj[cName] = [childObj[cName]];
+                            childObj[cName].push(val);
+                        } else childObj[cName] = val;
+                        hasElem = true;
+                    } else if (c.nodeType === Node.TEXT_NODE && c.textContent.trim()) {
+                        const txt = c.textContent.trim();
+                        if (!hasElem && Object.keys(childObj).length===0 && (!obj["@attributes"] || !Object.keys(obj["@attributes"]).length)) return txt;
+                        childObj["#text"] = txt;
+                    }
+                }
+                if (hasElem) Object.assign(obj, childObj);
+                const res = {}; res[nodeName] = obj;
+                return res;
+            }
+            return null;
+        }
+        return JSON.parse(JSON.stringify(toJson(root)));
+    }
+
+    // ================= PDF -> OBJETO =================
+    async function parsePdfToJson(arrayBuffer, includePos) {
+        if (!pdfReady) throw new Error("PDF.js não disponível. Recarregue a página.");
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const pages = [];
+        let totalChars = 0;
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const txt = await page.getTextContent();
+            const items = txt.items;
+            const pageInfo = { page: i, items: [] };
+            for (const it of items) {
+                if (includePos) pageInfo.items.push({ str: it.str, x: it.transform[4], y: it.transform[5], width: it.width, height: it.height });
+                else { pageInfo.items.push(it.str); totalChars += it.str.length; }
+            }
+            if (!includePos) pageInfo.text = items.map(it=>it.str).join(' ');
+            pages.push(pageInfo);
+        }
+        if (totalChars === 0) setStatus("⚠️ Nenhum texto extraído – PDF escaneado?", false, false, true);
+        return { source: "pdf", filename: originalBaseName, totalPages: pdf.numPages, pages };
+    }
+
+    // ================= CONVERSÃO PRINCIPAL (ARQUIVO) =================
+    async function performConversion() {
+        if (isConverting) return;
+        isConverting = true;
+        convertBtn.disabled = true;
+        setStatus("Convertendo arquivo...", false, false, false, true);
+        try {
+            let raw = null;
+            if (currentFileType === 'excel') {
+                if (!workbook || !currentSheetName) throw new Error("Excel não carregado");
+                const ws = workbook.Sheets[currentSheetName];
+                const useHeader = headerCheckbox.checked;
+                raw = useHeader ? XLSX.utils.sheet_to_json(ws, { defval: "" }) : XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+                if (!raw || raw.length === 0) throw new Error("Planilha vazia");
+            } else if (currentFileType === 'xml') {
+                if (!xmlRawString) throw new Error("XML não carregado");
+                raw = convertXmlToJson(xmlRawString, removeNamespacesChk.checked);
+            } else if (currentFileType === 'pdf') {
+                if (!pdfData) throw new Error("PDF não carregado");
+                raw = await parsePdfToJson(pdfData, pdfIncludePositions.checked);
+            } else throw new Error("Nenhum arquivo carregado");
+            raw = cleanData(raw, cleanCurrencyCheckbox.checked, formatDatesCheckbox.checked);
+            const fmt = outputFormatSelect.value;
+            currentResultString = formatOutput(raw, fmt);
+            resultPreview.value = currentResultString;
+            downloadBtn.disabled = false; copyBtn.disabled = false; formatBtn.disabled = (fmt !== 'json');
+            setStatus(`✅ Conversão para ${fmt.toUpperCase()} concluída!`, false, true);
+        } catch (err) {
+            setStatus(`❌ Erro: ${err.message}`, true);
+            currentResultString = ''; resultPreview.value = '';
+            downloadBtn.disabled = true; copyBtn.disabled = true; formatBtn.disabled = true;
+        } finally {
+            isConverting = false; convertBtn.disabled = false;
+        }
+    }
+
+    // ================= CONVERSÃO DE TEXTO COLADO =================
+    async function convertPasted() {
+        const text = pasteInput.value.trim();
+        if (!text) { setStatus("❌ Nenhum texto para converter. Cole algo.", true); return; }
+        let type = pasteType.value;
+        let rawData = null;
+        setStatus("Processando texto colado...", false, false, false, true);
+        try {
+            if (type === 'auto') {
+                if ((text.trim().startsWith('{') && text.trim().endsWith('}')) || (text.trim().startsWith('[') && text.trim().endsWith(']'))) type = 'json';
+                else if (text.trim().startsWith('<') && text.trim().endsWith('>')) type = 'xml';
+                else if (text.includes(',') || text.includes(';') || text.includes('\t')) type = 'csv';
+                else type = 'text';
+            }
+            if (type === 'json') {
+                rawData = JSON.parse(text);
+            } else if (type === 'xml') {
+                rawData = convertXmlToJson(text, false);
+            } else if (type === 'csv') {
+                let delim = csvDelimiterSelect.value;
+                if (delim === 'auto') delim = detectDelimiter(text);
+                const d = delim === '\\t' ? '\t' : delim;
+                const wb = XLSX.read(text, { type: 'string', FS: d, raw: true, cellDates: true, defval: "" });
+                const firstSheet = wb.SheetNames[0];
+                const ws = wb.Sheets[firstSheet];
+                const useHeader = headerCheckbox.checked;
+                rawData = useHeader ? XLSX.utils.sheet_to_json(ws, { defval: "" }) : XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+            } else {
+                rawData = { texto_colado: text };
+            }
+            rawData = cleanData(rawData, cleanCurrencyCheckbox.checked, formatDatesCheckbox.checked);
+            const fmt = outputFormatSelect.value;
+            currentResultString = formatOutput(rawData, fmt);
+            resultPreview.value = currentResultString;
+            downloadBtn.disabled = false; copyBtn.disabled = false; formatBtn.disabled = (fmt !== 'json');
+            originalBaseName = 'colado';
+            setStatus(`✅ Texto colado convertido para ${fmt.toUpperCase()}!`, false, true);
+        } catch (err) {
+            setStatus(`❌ Erro ao converter o texto colado: ${err.message}`, true);
+            currentResultString = ''; resultPreview.value = '';
+            downloadBtn.disabled = true; copyBtn.disabled = true; formatBtn.disabled = true;
+        }
+    }
+
+    // ================= LIMPEZAS =================
+    function clearAll() {
+        resetConverterState();
+        fileInfoDiv.innerHTML = `<span class="badge-file">Nenhum arquivo</span><span>Arraste ou clique: Excel, CSV, XML, PDF (max. 50 MB)</span>`;
+        fileInput.value = '';
+        pasteInput.value = '';
+        setStatus("🧹 Tudo limpo. Pronto para nova conversão.", false, false);
+    }
+    function clearPaste() { pasteInput.value = ''; setStatus("Campo de colagem limpo.", false, false); }
+
+    // ================= EVENTOS =================
+    fileInput.addEventListener('change', e => e.target.files[0] && handleFileUpload(e.target.files[0]));
+    sheetSelect.addEventListener('change', () => { if (currentFileType === 'excel') currentSheetName = sheetSelect.value; });
+    convertBtn.addEventListener('click', performConversion);
+    pasteConvertBtn.addEventListener('click', convertPasted);
+    clearPasteBtn.addEventListener('click', clearPaste);
+    downloadBtn.addEventListener('click', () => {
+        if (!currentResultString) return setStatus("Nada para baixar", true);
+        let ext = outputFormatSelect.value;
+        if (ext === 'markdown') ext = 'md';
+        if (ext === 'toon') ext = 'toon';
+        const fileName = `${originalBaseName || 'dados'}.${ext}`;
+        const blob = new Blob([currentResultString], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = fileName;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setStatus(`📥 Download: ${fileName}`, false, true);
+    });
+    copyBtn.addEventListener('click', () => {
+        if (!currentResultString) return setStatus("Nada para copiar", true);
+        navigator.clipboard.writeText(currentResultString);
+        setStatus("📋 Copiado!", false, true);
+    });
+    formatBtn.addEventListener('click', () => {
+        if (!currentResultString || outputFormatSelect.value !== 'json') return setStatus("Formatar só para JSON", true);
+        try {
+            const parsed = JSON.parse(currentResultString);
+            const formatted = JSON.stringify(parsed, null, 2);
+            currentResultString = formatted;
+            resultPreview.value = currentResultString;
+            setStatus("JSON reindentado.", false, true);
+        } catch(e) { setStatus("Erro: conteúdo não é JSON válido.", true); }
+    });
+    clearBtn.addEventListener('click', clearAll);
+    csvDelimiterSelect.addEventListener('change', () => {
+        if (currentFileType === 'excel' && fileInput.files[0]?.name.toLowerCase().endsWith('.csv')) {
+            handleFileUpload(fileInput.files[0]);
+        }
+    });
+
+    // Drag & drop
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter','dragover','dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
+    ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor='#2c9a8e'; dropZone.style.backgroundColor='#f0f7fc'; }));
+    ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor='#e2e9f0'; dropZone.style.backgroundColor='#f9fbfd'; }));
+    dropZone.addEventListener('drop', e => {
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+            handleFileUpload(file);
+        }
+    });
+
+    window.addEventListener('load', () => resetConverterState());
+</script>
+</body>
+</html>
