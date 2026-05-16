@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://silvioalbqrq.github.io/conversor-json-md/ -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Conversor Universal → JSON / Markdown / TOON | Excel, XML, CSV, PDF, Colar</title>
+    <!-- PWA manifest embutido -->
+    <link rel="manifest" href="data:application/manifest+json,{%0A        \" name\":\"conversor="" universal="" json="" markdown="" toon\",="" \"short_name\":\"convjson\",="" \"start_url\":\".\",="" \"display\":\"standalone\",="" \"background_color\":\"#0b2b3b\",="" \"theme_color\":\"#1a5f64\",="" \"icons\":[{\"src\":\"data:image="" svg+xml,%3csvg="" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" %3e%3crect="" width="100" height="100" fill="%232c9a8e" %3e%3ctext="" x="50" y="68" font-size="60" text-anchor="middle" %3e🔄%3c="" text%3e%3c="" svg%3e\",\"sizes\":\"any\"}]="" }"="">
+    <!-- SheetJS -->
+    <script src="./Conversor Universal → JSON _ Markdown _ TOON _ Excel, XML, CSV, PDF, Colar_files/xlsx.full.min.js.baixados"></script>
+    <!-- PDF.js com fallback -->
+    <script>
+        function loadPdfJs(cdnList, index = 0) {
+            if (index >= cdnList.length) {
+                console.error("Todas as CDNs do PDF.js falharam.");
+                window.pdfjsLoadError = true;
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = cdnList[index];
+            script.onload = () => {
+                console.log(`PDF.js carregado de: ${cdnList[index]}`);
+                window.pdfjsLoadError = false;
+                if (typeof pdfjsLib !== 'undefined') {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = cdnList[index].replace('pdf.min.js', 'pdf.worker.min.js');
+                }
+            };
+            script.onerror = () => {
+                console.warn(`Falha ao carregar PDF.js de: ${cdnList[index]}`);
+                loadPdfJs(cdnList, index + 1);
+            };
+            document.head.appendChild(script);
+        }
+        const cdnList = [
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js',
+            'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js'
+        ];
+        loadPdfJs(cdnList);
+    </script><script src="./Conversor Universal → JSON _ Markdown _ TOON _ Excel, XML, CSV, PDF, Colar_files/pdf.min.js.baixados"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1a2a3a;
+        }
+        .corporate-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+        .company-header {
+            background: #0b2b3b;
+            padding: 1.6rem 2rem;
+            border-bottom: 1px solid #1e4a62;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            background: #2c9a8e;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: white;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #9bb7c9;
+            margin-top: 4px;
+        }
+        .content-pane {
+            padding: 2rem 2rem 1.5rem 2rem;
+        }
+        .upload-card {
+            background: #f9fbfd;
+            border: 1px solid #e2e9f0;
+            border-radius: 18px;
+            padding: 1.6rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .upload-card:hover {
+            border-color: #8ba7bc;
+            background: #ffffff;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+        }
+        .upload-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .upload-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #1f5569;
+            font-size: 1.1rem;
+        }
+        .file-label-btn {
+            background: #1f6e6b;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .file-label-btn:hover {
+            background: #0b544f;
+            transform: translateY(-1px);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-info {
+            background: #eef3f7;
+            padding: 0.6rem 1rem;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            color: #1e5a6e;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border: 1px solid #dde5ec;
+        }
+        .badge-file {
+            font-weight: 600;
+            background: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #106b64;
+        }
+        .settings-panel {
+            background: #ffffff;
+            border: 1px solid #e9edf2;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .setting-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .setting-group label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: #4a6f7e;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .setting-select, .setting-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cfdde6;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f3b44;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .textarea-colagem {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cfdde6;
+            background: #fafcfd;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            resize: vertical;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 1.2rem;
+        }
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6e6b;
+        }
+        .checkbox-item label {
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1a3e4b;
+            margin: 0;
+        }
+        .btn-primary, .btn-secondary, .btn-clear {
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #1a5f64;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0e464b;
+            transform: translateY(-1px);
+        }
+        .btn-primary:disabled {
+            background: #b7cfd4;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .btn-secondary {
+            background: #eef2f7;
+            border: 1px solid #cfdfe8;
+            color: #1a5f64;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #e3eaf1;
+            border-color: #9bb7c9;
+        }
+        .btn-clear {
+            background: #fde7e7;
+            border: 1px solid #f5c6c6;
+            color: #c0392b;
+        }
+        .btn-clear:hover {
+            background: #f8d7d7;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .preview-section {
+            margin-top: 0.5rem;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .preview-header h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c6477;
+        }
+        .json-viewer {
+            background: #1e2a32;
+            border-radius: 18px;
+            padding: 1rem;
+            min-height: 320px;
+            max-height: 55vh;
+            overflow: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+            background: transparent;
+            border: none;
+            color: #d9e9f2;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+        }
+        .status-bar {
+            margin-top: 1.2rem;
+            padding: 0.8rem 1rem;
+            background: #f4f8fe;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            color: #2c5f73;
+            border-left: 3px solid #2c9a8e;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-bar.error {
+            background: #fef3f2;
+            border-left-color: #d45a4a;
+            color: #b13e2e;
+        }
+        .status-bar.success {
+            background: #e5f6ef;
+            border-left-color: #2c8c6e;
+            color: #146b4b;
+        }
+        .status-bar.warning {
+            background: #fff3e0;
+            border-left-color: #f39c12;
+            color: #c06d0a;
+        }
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #1f6e6b;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .tooltip-icon {
+            cursor: help;
+            font-size: 0.75rem;
+            background: #d4e0e8;
+            border-radius: 50%;
+            display: inline-block;
+            width: 16px;
+            text-align: center;
+            margin-left: 5px;
+        }
+        footer {
+            background: #f8fafc;
+            border-top: 1px solid #e3eaf0;
+            padding: 1rem 2rem;
+            font-size: 0.7rem;
+            color: #5c7f8c;
+            text-align: center;
+        }
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 1px solid #e0e9f0;
+        }
+        @media (max-width: 760px) {
+            body { padding: 1rem; }
+            .content-pane { padding: 1.5rem; }
+            .settings-panel { flex-direction: column; align-items: stretch; }
+            .checkbox-item { padding-top: 0; }
+        }
+
+    /* ===== PROTEÇÃO DE CÓDIGO ===== */
+    body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    /* Permite seleção, cópia e colagem nas áreas interativas */
+    #resultPreview, #pasteInput, .textarea-colagem,
+    .json-viewer, .json-viewer textarea,
+    .settings-panel textarea {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+        user-select: text !important;
+    }
+    </style>
+</head>
+<body>
+<script>
+    // ===== BLOQUEIO DE CÓDIGO-FONTE =====
+    (function() {
+        // IDs e seletores dos campos que devem permanecer livres
+        function isEditableTarget(el) {
+            if (!el) return false;
+            var tag = el.tagName;
+            if (tag === 'TEXTAREA' || tag === 'INPUT') return true;
+            if (el.isContentEditable) return true;
+            // verifica por id
+            if (el.id === 'pasteInput' || el.id === 'resultPreview') return true;
+            // verifica ancestral textarea (caso o evento borbulhe de um filho)
+            var p = el;
+            while (p) {
+                if (p.tagName === 'TEXTAREA' || p.tagName === 'INPUT') return true;
+                if (p.id === 'pasteInput' || p.id === 'resultPreview') return true;
+                p = p.parentElement;
+            }
+            return false;
+        }
+
+        // Bloqueia F12, Ctrl+Shift+I/J/C/U, Ctrl+U, Ctrl+S
+        // EXCETO: Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A quando o foco está em campo editável
+        document.addEventListener('keydown', function(e) {
+            var inEditable = isEditableTarget(document.activeElement) || isEditableTarget(e.target);
+            // Sempre libera atalhos de edição em campos editáveis
+            if (inEditable && e.ctrlKey && !e.shiftKey && ['C','c','V','v','X','x','A','a','Z','z'].includes(e.key)) return;
+            var blocked = false;
+            if (e.key === 'F12') blocked = true;
+            if (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c','K','k'].includes(e.key)) blocked = true;
+            if (e.ctrlKey && ['U','u'].includes(e.key)) blocked = true;
+            if (e.ctrlKey && ['S','s'].includes(e.key)) blocked = true;
+            if (e.ctrlKey && e.shiftKey && e.key === 'F') blocked = true;
+            if (blocked) { e.preventDefault(); e.stopPropagation(); return false; }
+        }, true);
+
+        // Bloqueia menu de contexto (botão direito), MAS libera em campos editáveis
+        document.addEventListener('contextmenu', function(e) {
+            if (isEditableTarget(e.target)) return; // permite em textarea/input
+            e.preventDefault();
+            return false;
+        }, true);
+
+        // Detecta DevTools aberto (técnica de tamanho de janela)
+        var devToolsCheck = function() {
+            var threshold = 160;
+            if (window.outerWidth - window.innerWidth > threshold || 
+                window.outerHeight - window.innerHeight > threshold) {
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;font-family:system-ui;background:#0b2b3b;color:#9bb7c9;gap:1rem;"><div style="font-size:3rem">🔒</div><h2 style="color:white;margin:0">Acesso restrito</h2><p style="margin:0;font-size:0.95rem">Ferramentas de desenvolvedor não são permitidas nesta página.</p></div>';
+            }
+        };
+        setInterval(devToolsCheck, 1000);
+
+        // Bloqueia arrastar elementos
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+            }
+        });
+
+        // Ofusca console
+        try {
+            Object.defineProperty(console, '_commandLineAPI', { get: function() { throw 'DevTools bloqueado'; } });
+        } catch(e) {}
+
+        // Bloqueia via debugger loop (executa no contexto do DevTools)
+        (function antiDebug() {
+            try {
+                (function() { 
+                    // Se o DevTools estiver aberto, o debugger pausa aqui continuamente
+                }).constructor('debugger')();
+            } catch(e) {}
+            setTimeout(antiDebug, 3000);
+        })();
+    })();
+</script>
+<div class="corporate-container">
+    <div class="company-header">
+        <div class="logo-area">
+            <div class="logo-icon">🔄</div>
+            <div class="logo-text">
+                <h1>Conversor Universal → JSON / Markdown / TOON</h1>
+                <p>Excel · XML · CSV · PDF · Colar dados · Limpeza de moeda · Datas ISO · PWA offline</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-pane">
+        <div class="upload-card" id="dropZone">
+            <div class="upload-header">
+                <div class="upload-title">📂 Arquivo fonte</div>
+                <label class="file-label-btn" for="excelInput">📎 Selecionar arquivo</label>
+                <input type="file" id="excelInput" accept=".xlsx, .xls, .xlsm, .xlsb, .csv, .xml, .pdf">
+            </div>
+            <div class="file-info" id="fileInfo">
+                <span class="badge-file">Nenhum arquivo</span>
+                <span>Arraste ou clique: Excel, CSV, XML, PDF (max. 50 MB)</span>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <div class="setting-group" id="sheetGroup">
+                <label>📑 Planilha (Excel/CSV)</label>
+                <select id="sheetSelect" class="setting-select" disabled=""><option value="">— Carregue um arquivo —</option></select>
+            </div>
+            <div class="setting-group" id="delimiterGroup" style="display: none;">
+                <label>📌 Delimitador CSV</label>
+                <select id="csvDelimiter" class="setting-select">
+                    <option value="auto">Automático</option>
+                    <option value=",">Vírgula (,)</option>
+                    <option value=";">Ponto e vírgula (;)</option>
+                    <option value="\t">Tabulação</option>
+                </select>
+            </div>
+            <div class="checkbox-item" id="pdfExtraGroup" style="display: none;">
+                <input type="checkbox" id="pdfIncludePositions" checked="">
+                <label>📍 Incluir coordenadas (PDF)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="headerCheckbox" checked="">
+                <label>🔖 Usar 1ª linha como cabeçalho</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="cleanCurrencyCheckbox">
+                <label>💰 Converter moeda para número (ex: R$ 1.250,00 → 1250.00)</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="formatDatesCheckbox" checked="">
+                <label>📅 Converter datas para ISO (AAAA-MM-DD)</label>
+            </div>
+            <div class="setting-group">
+                <label>📄 Formato de saída</label>
+                <select id="outputFormat" class="setting-select">
+                    <option value="json">JSON</option>
+                    <option value="markdown">Markdown</option>
+                    <option value="toon">TOON</option>
+                </select>
+            </div>
+            <div class="checkbox-item" id="xmlNamespaceGroup" style="display: none;">
+                <input type="checkbox" id="removeNamespaces">
+                <label>🏷️ Remover namespaces (XML)</label>
+            </div>
+            <div class="setting-group">
+                <button class="btn-primary" id="convertBtn" disabled="">⚡ Converter (arquivo)</button>
+            </div>
+        </div>
+
+        <div class="settings-panel" style="border: 1px solid #d4e2ec; background: #fafcfd; flex-direction: column; align-items: stretch;">
+            <div class="upload-title" style="margin-bottom: 0.5rem;">📋 Colar dados para conversão</div>
+            <textarea id="pasteInput" rows="5" class="textarea-colagem" placeholder="Cole aqui dados em JSON, XML, CSV (texto) ou qualquer outro formato estruturado..."></textarea>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.8rem; align-items: flex-end;">
+                <div class="setting-group" style="min-width: 160px;">
+                    <label>Tipo de entrada</label>
+                    <select id="pasteType" class="setting-select">
+                        <option value="auto">Auto detectar</option>
+                        <option value="json">JSON</option>
+                        <option value="xml">XML</option>
+                        <option value="csv">CSV (texto)</option>
+                        <option value="text">Texto puro</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-primary" id="pasteConvertBtn">🔄 Converter texto colado</button>
+                </div>
+                <div>
+                    <button class="btn-clear" id="clearPasteBtn">🗑️ Limpar campo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-header">
+                <h3>📄 Resultado da conversão</h3>
+                <div class="action-buttons">
+                    <button class="btn-copy" id="copyBtn" disabled="">📋 Copiar</button>
+                    <button class="btn-secondary" id="formatBtn" disabled="">✨ Reindentar (JSON)</button>
+                    <button class="btn-secondary" id="downloadBtn" disabled="">⬇️ Baixar</button>
+                    <button class="btn-clear" id="clearBtn">🗑️ Limpar tudo</button>
+                </div>
+            </div>
+            <div class="json-viewer">
+                <textarea id="resultPreview" readonly="" placeholder="Resultado da conversão aparecerá aqui."></textarea>
+            </div>
+            <div id="statusMsg" class="status-bar">✅ Pronto · Carregue um arquivo ou cole dados</div>
+        </div>
+    </div>
+    <footer>🔒 100% local · PWA offline · Limpeza de moeda · Datas ISO · PDF.js · SheetJS</footer>
+</div>
+
+<script>
+    // ================= SERVICE WORKER (PWA) OFFLINE =================
+    if ('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('install', e => e.waitUntil(caches.open('conv-cache').then(c => c.addAll([
+            '/', '/index.html', 
+            'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js'
+        ]))));
+        self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));`;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(console.warn);
+    }
+
+    // ================= FUNÇÕES DE LIMPEZA =================
+    function convertCurrency(value) {
+        if (typeof value !== 'string') return value;
+        const match = value.match(/[+-]?\s*[\d\.,]+/);
+        if (!match) return value;
+        let numStr = match[0].trim();
+        let isBrazilian = numStr.includes(',') && (numStr.split(',').length === 2) && (numStr.split('.').length <= 2);
+        if (isBrazilian) {
+            numStr = numStr.replace(/\./g, '').replace(',', '.');
+        }
+        let num = parseFloat(numStr);
+        return isNaN(num) ? value : num;
+    }
+
+    function cleanData(data, convertCurrencyFlag, formatDatesFlag) {
+        if (data === null || data === undefined) return data;
+        if (convertCurrencyFlag && typeof data === 'string') {
+            return convertCurrency(data);
+        }
+        if (Array.isArray(data)) {
+            return data.map(item => cleanData(item, convertCurrencyFlag, formatDatesFlag));
+        }
+        if (data && typeof data === 'object') {
+            const newObj = {};
+            for (let [k, v] of Object.entries(data)) {
+                let cleaned = cleanData(v, convertCurrencyFlag, formatDatesFlag);
+                if (formatDatesFlag && typeof v === 'number') {
+                    const date = new Date((v - 25569) * 86400000);
+                    if (!isNaN(date.getTime()) && v > 1000 && v < 100000 && Number.isInteger(v)) {
+                        cleaned = date.toISOString().split('T')[0];
+                    }
+                }
+                newObj[k] = cleaned;
+            }
+            return newObj;
+        }
+        if (formatDatesFlag && typeof data === 'number') {
+            const date = new Date((data - 25569) * 86400000);
+            if (!isNaN(date.getTime()) && data > 1000 && data < 100000 && Number.isInteger(data)) {
+                return date.toISOString().split('T')[0];
+            }
+            return data;
+        }
+        return data;
+    }
+
+    // ================= DETECÇÃO INTELIGENTE DE DELIMITADOR CSV =================
+    function detectDelimiter(csvText) {
+        const firstLines = csvText.split(/\r?\n/).slice(0, 5).join('\n');
+        const commaCount = (firstLines.match(/,/g) || []).length;
+        const semicolonCount = (firstLines.match(/;/g) || []).length;
+        if (semicolonCount > commaCount) return ';';
+        return ',';
+    }
+
+    // ================= FUNÇÃO MARKDOWN MELHORADA (UMA TABELA PARA CATÁLOGOS) =================
+    function toMarkdown(data, indentLevel = 0) {
+        const indent = '  '.repeat(indentLevel);
+        
+        // 1. Array de objetos com a mesma estrutura (dados tabulares) -> UMA ÚNICA TABELA
+        if (Array.isArray(data) && data.length > 0 && data.every(item => item && typeof item === 'object' && !Array.isArray(item))) {
+            // Coleta todas as chaves (todas as colunas possíveis)
+            const allKeys = new Set();
+            for (const item of data) {
+                Object.keys(item).forEach(k => allKeys.add(k));
+            }
+            const headers = Array.from(allKeys);
+            // Se tiver pelo menos 2 colunas, cria uma tabela consolidada
+            if (headers.length >= 2) {
+                let md = '| ' + headers.join(' | ') + ' |\n|' + headers.map(() => '---').join('|') + '|\n';
+                for (const row of data) {
+                    md += '| ' + headers.map(h => String(row[h] ?? '').replace(/\n/g, ' ')).join(' | ') + ' |\n';
+                }
+                return md;
+            }
+            // Se tiver apenas 1 coluna, transforma em lista com traços
+            if (headers.length === 1) {
+                let md = '';
+                for (const row of data) {
+                    md += indent + '- ' + String(row[headers[0]] ?? '').replace(/\n/g, ' ') + '\n';
+                }
+                return md;
+            }
+        }
+        
+        // 2. Caso especial: páginas de PDF (não consolidar em tabela)
+        if (Array.isArray(data) && data.length > 0 && data.every(item => item && item.hasOwnProperty('page'))) {
+            let md = '';
+            for (const page of data) {
+                md += `${indent}## Página ${page.page}\n\n`;
+                if (page.text) md += `${indent}${page.text}\n\n`;
+                else if (page.items && Array.isArray(page.items)) {
+                    if (page.items.length > 0 && typeof page.items[0] === 'object') {
+                        for (const it of page.items) {
+                            md += `${indent}- ${it.str} (x:${it.x?.toFixed(0)}, y:${it.y?.toFixed(0)})\n`;
+                        }
+                        md += '\n';
+                    } else {
+                        md += `${indent}${page.items.join(' ')}\n\n`;
+                    }
+                }
+            }
+            return md;
+        }
+        
+        // 3. Lista simples (arrays de primitivos)
+        if (Array.isArray(data)) {
+            return data.map(item => `${indent}- ${toMarkdown(item, 0)}`).join('\n');
+        }
+        
+        // 4. Objeto simples (chave/valor) -> tabela descritiva
+        if (typeof data === 'object' && data !== null) {
+            const allPrimitive = Object.values(data).every(v => typeof v !== 'object' || v === null);
+            if (allPrimitive) {
+                let md = '| Chave | Valor |\n| --- | --- |\n';
+                for (let [k, v] of Object.entries(data)) {
+                    md += `| ${k} | ${String(v)} |\n`;
+                }
+                return md;
+            } else {
+                // Objeto aninhado -> seções
+                let md = '';
+                for (let [k, v] of Object.entries(data)) {
+                    md += `\n## ${k}\n\n${toMarkdown(v, indentLevel + 1)}\n`;
+                }
+                return md;
+            }
+        }
+        
+        return String(data);
+    }
+
+    // ================= OUTRAS FUNÇÕES AUXILIARES (jsonToToon, etc.) =================
+    function jsonToToon(data, indent = 0) {
+        const sp = '  '.repeat(indent);
+        if (data === null) return 'null';
+        if (typeof data === 'boolean') return data ? 'true' : 'false';
+        if (typeof data === 'number') return String(data);
+        if (typeof data === 'string') {
+            return (data.includes('\n') || data.includes('"') || data.includes(':')) ? JSON.stringify(data) : data;
+        }
+        if (Array.isArray(data)) {
+            if (data.length === 0) return '[]';
+            const allPrimitive = data.every(v => typeof v !== 'object' || v === null);
+            if (allPrimitive) return '[' + data.map(v => jsonToToon(v,0)).join(', ') + ']';
+            let out = '';
+            for (const item of data) {
+                if (item && typeof item === 'object') out += sp + '- ' + jsonToToon(item, indent+1).trimStart();
+                else out += sp + '- ' + jsonToToon(item,0) + '\n';
+            }
+            return out;
+        }
+        if (typeof data === 'object') {
+            let out = '';
+            for (const [k,v] of Object.entries(data)) {
+                const val = jsonToToon(v, indent+1);
+                if (v && typeof v === 'object' && !Array.isArray(v)) out += sp + k + ':\n' + val;
+                else if (Array.isArray(v) && v.some(x => typeof x === 'object')) out += sp + k + ':\n' + val;
+                else out += sp + k + ': ' + val + '\n';
+            }
+            return out;
+        }
+        return String(data);
+    }
+
+    function formatOutput(rawData, format) {
+        if (format === 'json') return JSON.stringify(rawData, null, 2);
+        if (format === 'markdown') return toMarkdown(rawData);
+        if (format === 'toon') return jsonToToon(rawData);
+        return JSON.stringify(rawData, null, 2);
+    }
+
+    // ================= ELEMENTOS DOM E ESTADO =================
+    const fileInput = document.getElementById('excelInput');
+    const fileInfoDiv = document.getElementById('fileInfo');
+    const sheetSelect = document.getElementById('sheetSelect');
+    const headerCheckbox = document.getElementById('headerCheckbox');
+    const cleanCurrencyCheckbox = document.getElementById('cleanCurrencyCheckbox');
+    const formatDatesCheckbox = document.getElementById('formatDatesCheckbox');
+    const outputFormatSelect = document.getElementById('outputFormat');
+    const convertBtn = document.getElementById('convertBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const formatBtn = document.getElementById('formatBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultPreview = document.getElementById('resultPreview');
+    const statusDiv = document.getElementById('statusMsg');
+    const csvDelimiterSelect = document.getElementById('csvDelimiter');
+    const delimiterGroup = document.getElementById('delimiterGroup');
+    const xmlNamespaceGroup = document.getElementById('xmlNamespaceGroup');
+    const pdfExtraGroup = document.getElementById('pdfExtraGroup');
+    const removeNamespacesChk = document.getElementById('removeNamespaces');
+    const pdfIncludePositions = document.getElementById('pdfIncludePositions');
+    const pasteInput = document.getElementById('pasteInput');
+    const pasteType = document.getElementById('pasteType');
+    const pasteConvertBtn = document.getElementById('pasteConvertBtn');
+    const clearPasteBtn = document.getElementById('clearPasteBtn');
+
+    let currentFileType = null;
+    let workbook = null;
+    let xmlRawString = null;
+    let pdfData = null;
+    let currentSheetName = null;
+    let currentResultString = '';
+    let originalBaseName = '';
+    let isConverting = false;
+    let pdfReady = false;
+
+    let pdfCheck = setInterval(() => {
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfReady = true;
+            clearInterval(pdfCheck);
+            if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+            }
+        }
+    }, 200);
+    setTimeout(() => clearInterval(pdfCheck), 5000);
+
+    function setStatus(msg, isErr = false, isSuccess = false, isWarning = false, showSpinner = false) {
+        statusDiv.innerHTML = '';
+        if (showSpinner) {
+            const s = document.createElement('div');
+            s.className = 'spinner';
+            statusDiv.appendChild(s);
+            statusDiv.appendChild(document.createTextNode(' ' + msg));
+        } else statusDiv.textContent = msg;
+        statusDiv.classList.remove('error','success','warning');
+        if (isErr) statusDiv.classList.add('error');
+        else if (isSuccess) statusDiv.classList.add('success');
+        else if (isWarning) statusDiv.classList.add('warning');
+    }
+
+    function resetUIForFileType() {
+        delimiterGroup.style.display = 'none';
+        xmlNamespaceGroup.style.display = 'none';
+        pdfExtraGroup.style.display = 'none';
+        sheetSelect.disabled = true;
+        if (currentFileType === 'xml') {
+            sheetSelect.innerHTML = '<option>— XML não usa planilhas —</option>';
+            xmlNamespaceGroup.style.display = 'flex';
+            headerCheckbox.disabled = false;
+        } else if (currentFileType === 'excel') {
+            sheetSelect.disabled = false;
+            const isCsv = fileInput.files[0]?.name.toLowerCase().endsWith('.csv');
+            delimiterGroup.style.display = isCsv ? 'flex' : 'none';
+            headerCheckbox.disabled = false;
+        } else if (currentFileType === 'pdf') {
+            sheetSelect.innerHTML = '<option>— PDF não possui planilhas —</option>';
+            pdfExtraGroup.style.display = 'flex';
+            headerCheckbox.disabled = true;
+        }
+    }
+
+    function resetConverterState() {
+        currentResultString = '';
+        resultPreview.value = '';
+        downloadBtn.disabled = true;
+        copyBtn.disabled = true;
+        formatBtn.disabled = true;
+        convertBtn.disabled = true;
+        workbook = null; xmlRawString = null; pdfData = null;
+        currentSheetName = null; currentFileType = null;
+        sheetSelect.innerHTML = '<option value="">— Carregue um arquivo —</option>';
+        headerCheckbox.disabled = false; isConverting = false;
+        delimiterGroup.style.display = 'none'; xmlNamespaceGroup.style.display = 'none'; pdfExtraGroup.style.display = 'none';
+    }
+
+    function getBaseName(filename) {
+        if (!filename) return 'convertido';
+        return filename.replace(/\.[^/.]+$/, '');
+    }
+
+    // ================= PROCESSAMENTO DE ARQUIVOS =================
+    async function loadPdf(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => { pdfData = e.target.result; currentFileType = 'pdf'; originalBaseName = getBaseName(file.name); resetUIForFileType(); convertBtn.disabled = false; resolve(); };
+            reader.onerror = () => reject(new Error("Erro na leitura do PDF"));
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    async function loadXml(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => { xmlRawString = e.target.result; currentFileType = 'xml'; originalBaseName = getBaseName(file.name); resetUIForFileType(); convertBtn.disabled = false; resolve(); };
+            reader.onerror = () => reject(new Error("Erro na leitura do XML"));
+            reader.readAsText(file, "UTF-8");
+        });
+    }
+    async function loadExcelOrCsv(file, ext) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    let wb;
+                    if (ext === 'csv') {
+                        let txt = e.target.result;
+                        let delim = csvDelimiterSelect.value;
+                        if (delim === 'auto') delim = detectDelimiter(txt);
+                        const d = delim === '\\t' ? '\t' : delim;
+                        wb = XLSX.read(txt, { type: 'string', FS: d, raw: true, cellDates: true, defval: "" });
+                    } else {
+                        wb = XLSX.read(e.target.result, { type: 'array', cellDates: true, defval: "" });
+                    }
+                    workbook = wb;
+                    currentFileType = 'excel';
+                    originalBaseName = getBaseName(file.name);
+                    const sheets = wb.SheetNames || [];
+                    if (!sheets.length) throw new Error("Nenhuma planilha");
+                    sheetSelect.innerHTML = sheets.map((n,i) => `<option value="${n.replace(/"/g,'&quot;')}">${n}${i===0?' (padrão)':''}</option>`).join('');
+                    currentSheetName = sheets[0];
+                    sheetSelect.value = currentSheetName;
+                    resetUIForFileType();
+                    convertBtn.disabled = false;
+                    resolve();
+                } catch(err) { reject(new Error("Erro ao interpretar: "+err.message)); }
+            };
+            reader.onerror = () => reject(new Error("Falha na leitura"));
+            if (ext === 'csv') reader.readAsText(file, "UTF-8");
+            else reader.readAsArrayBuffer(file);
+        });
+    }
+
+    async function handleFileUpload(file) {
+        if (!file) return;
+        if (file.size > 50*1024*1024) { setStatus(`❌ Limite 50MB`, true); return; }
+        const ext = file.name.split('.').pop().toLowerCase();
+        const allowed = ['xlsx','xls','xlsm','xlsb','csv','xml','pdf'];
+        if (!allowed.includes(ext)) { setStatus(`❌ Formato .${ext} não suportado`, true); return; }
+        resetConverterState();
+        fileInfoDiv.innerHTML = `<span class="badge-file">📎 ${file.name}</span><span>Carregando... ${(file.size/1024).toFixed(1)} KB</span>`;
+        setStatus(`Lendo ${file.name}...`, false, false, false, true);
+        try {
+            if (ext === 'pdf') await loadPdf(file);
+            else if (ext === 'xml') await loadXml(file);
+            else await loadExcelOrCsv(file, ext);
+            fileInfoDiv.innerHTML = `<span class="badge-file">✅ ${file.name}</span><span>${(file.size/1024).toFixed(1)} KB · pronto</span>`;
+            setStatus(`✅ Arquivo carregado.`, false, true);
+        } catch(err) { setStatus(`❌ Erro: ${err.message}`, true); fileInfoDiv.innerHTML = `<span class="badge-file">❌ Falha</span>`; convertBtn.disabled = true; }
+    }
+
+    // ================= CONVERSÃO XML -> OBJETO =================
+    function convertXmlToJson(xmlString, removeNs) {
+        const parser = new DOMParser();
+        const xmlDom = parser.parseFromString(xmlString, "application/xml");
+        const parserError = xmlDom.querySelector("parsererror");
+        if (parserError) throw new Error("XML inválido");
+        const root = xmlDom.documentElement;
+        function simplify(name) { return removeNs ? name.replace(/^.*:/,'') : name; }
+        function toJson(node) {
+            if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim() || null;
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const obj = {};
+                const nodeName = simplify(node.nodeName);
+                if (node.attributes.length) {
+                    obj["@attributes"] = {};
+                    for (let a of node.attributes) obj["@attributes"][simplify(a.name)] = a.value;
+                }
+                const childObj = {};
+                let hasElem = false;
+                for (let c of node.childNodes) {
+                    if (c.nodeType === Node.ELEMENT_NODE) {
+                        const cName = simplify(c.nodeName);
+                        const val = toJson(c);
+                        if (childObj[cName]) {
+                            if (!Array.isArray(childObj[cName])) childObj[cName] = [childObj[cName]];
+                            childObj[cName].push(val);
+                        } else childObj[cName] = val;
+                        hasElem = true;
+                    } else if (c.nodeType === Node.TEXT_NODE && c.textContent.trim()) {
+                        const txt = c.textContent.trim();
+                        if (!hasElem && Object.keys(childObj).length===0 && (!obj["@attributes"] || !Object.keys(obj["@attributes"]).length)) return txt;
+                        childObj["#text"] = txt;
+                    }
+                }
+                if (hasElem) Object.assign(obj, childObj);
+                const res = {}; res[nodeName] = obj;
+                return res;
+            }
+            return null;
+        }
+        return JSON.parse(JSON.stringify(toJson(root)));
+    }
+
+    // ================= PDF -> OBJETO =================
+    async function parsePdfToJson(arrayBuffer, includePos) {
+        if (!pdfReady) throw new Error("PDF.js não disponível. Recarregue a página.");
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const pages = [];
+        let totalChars = 0;
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const txt = await page.getTextContent();
+            const items = txt.items;
+            const pageInfo = { page: i, items: [] };
+            for (const it of items) {
+                if (includePos) pageInfo.items.push({ str: it.str, x: it.transform[4], y: it.transform[5], width: it.width, height: it.height });
+                else { pageInfo.items.push(it.str); totalChars += it.str.length; }
+            }
+            if (!includePos) pageInfo.text = items.map(it=>it.str).join(' ');
+            pages.push(pageInfo);
+        }
+        if (totalChars === 0) setStatus("⚠️ Nenhum texto extraído – PDF escaneado?", false, false, true);
+        return { source: "pdf", filename: originalBaseName, totalPages: pdf.numPages, pages };
+    }
+
+    // ================= CONVERSÃO PRINCIPAL (ARQUIVO) =================
+    async function performConversion() {
+        if (isConverting) return;
+        isConverting = true;
+        convertBtn.disabled = true;
+        setStatus("Convertendo arquivo...", false, false, false, true);
+        try {
+            let raw = null;
+            if (currentFileType === 'excel') {
+                if (!workbook || !currentSheetName) throw new Error("Excel não carregado");
+                const ws = workbook.Sheets[currentSheetName];
+                const useHeader = headerCheckbox.checked;
+                raw = useHeader ? XLSX.utils.sheet_to_json(ws, { defval: "" }) : XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+                if (!raw || raw.length === 0) throw new Error("Planilha vazia");
+            } else if (currentFileType === 'xml') {
+                if (!xmlRawString) throw new Error("XML não carregado");
+                raw = convertXmlToJson(xmlRawString, removeNamespacesChk.checked);
+            } else if (currentFileType === 'pdf') {
+                if (!pdfData) throw new Error("PDF não carregado");
+                raw = await parsePdfToJson(pdfData, pdfIncludePositions.checked);
+            } else throw new Error("Nenhum arquivo carregado");
+            raw = cleanData(raw, cleanCurrencyCheckbox.checked, formatDatesCheckbox.checked);
+            const fmt = outputFormatSelect.value;
+            currentResultString = formatOutput(raw, fmt);
+            resultPreview.value = currentResultString;
+            downloadBtn.disabled = false; copyBtn.disabled = false; formatBtn.disabled = (fmt !== 'json');
+            setStatus(`✅ Conversão para ${fmt.toUpperCase()} concluída!`, false, true);
+        } catch (err) {
+            setStatus(`❌ Erro: ${err.message}`, true);
+            currentResultString = ''; resultPreview.value = '';
+            downloadBtn.disabled = true; copyBtn.disabled = true; formatBtn.disabled = true;
+        } finally {
+            isConverting = false; convertBtn.disabled = false;
+        }
+    }
+
+    // ================= CONVERSÃO DE TEXTO COLADO =================
+    async function convertPasted() {
+        const text = pasteInput.value.trim();
+        if (!text) { setStatus("❌ Nenhum texto para converter. Cole algo.", true); return; }
+        let type = pasteType.value;
+        let rawData = null;
+        setStatus("Processando texto colado...", false, false, false, true);
+        try {
+            if (type === 'auto') {
+                if ((text.trim().startsWith('{') && text.trim().endsWith('}')) || (text.trim().startsWith('[') && text.trim().endsWith(']'))) type = 'json';
+                else if (text.trim().startsWith('<') && text.trim().endsWith('>')) type = 'xml';
+                else if (text.includes(',') || text.includes(';') || text.includes('\t')) type = 'csv';
+                else type = 'text';
+            }
+            if (type === 'json') {
+                rawData = JSON.parse(text);
+            } else if (type === 'xml') {
+                rawData = convertXmlToJson(text, false);
+            } else if (type === 'csv') {
+                let delim = csvDelimiterSelect.value;
+                if (delim === 'auto') delim = detectDelimiter(text);
+                const d = delim === '\\t' ? '\t' : delim;
+                const wb = XLSX.read(text, { type: 'string', FS: d, raw: true, cellDates: true, defval: "" });
+                const firstSheet = wb.SheetNames[0];
+                const ws = wb.Sheets[firstSheet];
+                const useHeader = headerCheckbox.checked;
+                rawData = useHeader ? XLSX.utils.sheet_to_json(ws, { defval: "" }) : XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+            } else {
+                rawData = { texto_colado: text };
+            }
+            rawData = cleanData(rawData, cleanCurrencyCheckbox.checked, formatDatesCheckbox.checked);
+            const fmt = outputFormatSelect.value;
+            currentResultString = formatOutput(rawData, fmt);
+            resultPreview.value = currentResultString;
+            downloadBtn.disabled = false; copyBtn.disabled = false; formatBtn.disabled = (fmt !== 'json');
+            originalBaseName = 'colado';
+            setStatus(`✅ Texto colado convertido para ${fmt.toUpperCase()}!`, false, true);
+        } catch (err) {
+            setStatus(`❌ Erro ao converter o texto colado: ${err.message}`, true);
+            currentResultString = ''; resultPreview.value = '';
+            downloadBtn.disabled = true; copyBtn.disabled = true; formatBtn.disabled = true;
+        }
+    }
+
+    // ================= LIMPEZAS =================
+    function clearAll() {
+        resetConverterState();
+        fileInfoDiv.innerHTML = `<span class="badge-file">Nenhum arquivo</span><span>Arraste ou clique: Excel, CSV, XML, PDF (max. 50 MB)</span>`;
+        fileInput.value = '';
+        pasteInput.value = '';
+        setStatus("🧹 Tudo limpo. Pronto para nova conversão.", false, false);
+    }
+    function clearPaste() { pasteInput.value = ''; setStatus("Campo de colagem limpo.", false, false); }
+
+    // ================= EVENTOS =================
+    fileInput.addEventListener('change', e => e.target.files[0] && handleFileUpload(e.target.files[0]));
+    sheetSelect.addEventListener('change', () => { if (currentFileType === 'excel') currentSheetName = sheetSelect.value; });
+    convertBtn.addEventListener('click', performConversion);
+    pasteConvertBtn.addEventListener('click', convertPasted);
+    clearPasteBtn.addEventListener('click', clearPaste);
+    downloadBtn.addEventListener('click', () => {
+        if (!currentResultString) return setStatus("Nada para baixar", true);
+        let ext = outputFormatSelect.value;
+        if (ext === 'markdown') ext = 'md';
+        if (ext === 'toon') ext = 'toon';
+        const fileName = `${originalBaseName || 'dados'}.${ext}`;
+        const blob = new Blob([currentResultString], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = fileName;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setStatus(`📥 Download: ${fileName}`, false, true);
+    });
+    copyBtn.addEventListener('click', () => {
+        if (!currentResultString) return setStatus("Nada para copiar", true);
+        navigator.clipboard.writeText(currentResultString);
+        setStatus("📋 Copiado!", false, true);
+    });
+    formatBtn.addEventListener('click', () => {
+        if (!currentResultString || outputFormatSelect.value !== 'json') return setStatus("Formatar só para JSON", true);
+        try {
+            const parsed = JSON.parse(currentResultString);
+            const formatted = JSON.stringify(parsed, null, 2);
+            currentResultString = formatted;
+            resultPreview.value = currentResultString;
+            setStatus("JSON reindentado.", false, true);
+        } catch(e) { setStatus("Erro: conteúdo não é JSON válido.", true); }
+    });
+    clearBtn.addEventListener('click', clearAll);
+    csvDelimiterSelect.addEventListener('change', () => {
+        if (currentFileType === 'excel' && fileInput.files[0]?.name.toLowerCase().endsWith('.csv')) {
+            handleFileUpload(fileInput.files[0]);
+        }
+    });
+
+    // Drag & drop
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter','dragover','dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
+    ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor='#2c9a8e'; dropZone.style.backgroundColor='#f0f7fc'; }));
+    ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, () => { dropZone.style.borderColor='#e2e9f0'; dropZone.style.backgroundColor='#f9fbfd'; }));
+    dropZone.addEventListener('drop', e => {
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+            handleFileUpload(file);
+        }
+    });
+
+    window.addEventListener('load', () => resetConverterState());
+</script>
+
+</body></html>
